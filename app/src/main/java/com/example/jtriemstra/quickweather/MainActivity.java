@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -36,6 +37,7 @@ public class MainActivity extends Activity {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        //under what conditions is this necessary?
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
@@ -44,6 +46,8 @@ public class MainActivity extends Activity {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
                             Log.d("Location", Double.toString(location.getLatitude()));
+                            TextView objTextView = (TextView) findViewById(R.id.txtOutput);
+                            objTextView.setText(Double.toString(location.getLatitude()));
                         }
                     }
                 });
@@ -55,6 +59,8 @@ public class MainActivity extends Activity {
             public void onLocationResult(LocationResult locationResult) {
                 for (Location location : locationResult.getLocations()) {
                     Log.d("LocationUpdate", Double.toString(location.getLatitude()));
+                    TextView objTextView = (TextView) findViewById(R.id.txtOutput);
+                    objTextView.setText(Double.toString(location.getLatitude()));
                 }
             };
         };
