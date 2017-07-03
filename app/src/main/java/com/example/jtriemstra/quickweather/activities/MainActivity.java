@@ -1,25 +1,26 @@
-package com.example.jtriemstra.quickweather;
+package com.example.jtriemstra.quickweather.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.jtriemstra.quickweather.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import com.example.jtriemstra.quickweather.services.FetchAddressIntentService;
 
 public class MainActivity extends Activity {
 
@@ -27,6 +28,8 @@ public class MainActivity extends Activity {
     private Location mLocation;
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
+    private AddressResultReceiver mResultReceiver;
+    private String mAddressOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,10 @@ public class MainActivity extends Activity {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        //under what conditions is this necessary?
+        //TODO: what can I do with this Handler() parameter?
+        mResultReceiver = new AddressResultReceiver(new Handler());
+
+        //TODO: under what conditions is this necessary?
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
@@ -45,9 +51,12 @@ public class MainActivity extends Activity {
                         Log.d("Location", "success");
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
+                            mLocation = location;
                             Log.d("Location", Double.toString(location.getLatitude()));
                             TextView objTextView = (TextView) findViewById(R.id.txtOutput);
                             objTextView.setText(Double.toString(location.getLatitude()));
+
+                            startIntentService();
                         }
                     }
                 });
@@ -61,6 +70,7 @@ public class MainActivity extends Activity {
                     Log.d("LocationUpdate", Double.toString(location.getLatitude()));
                     TextView objTextView = (TextView) findViewById(R.id.txtOutput);
                     objTextView.setText(Double.toString(location.getLatitude()));
+                    mLocation = location;
                 }
             };
         };
@@ -118,5 +128,43 @@ public class MainActivity extends Activity {
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    protected void startIntentService() {
+        Log.d("x", "starting intent service");
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        intent.putExtra(FetchAddressIntentService.RECEIVER, mResultReceiver);
+        intent.putExtra(FetchAddressIntentService.LOCATION_DATA_EXTRA, mLocation);
+        startService(intent);
+    }
+
+    private void displayAddressOutput()
+    {
+        Log.d("address", mAddressOutput);
+        ((TextView) findViewById(R.id.txtCityOutput)).setText(mAddressOutput);
+    }
+
+    @SuppressLint("ParcelCreator")
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+            Log.d("x","creating AddressResultReceiver");
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            Log.d("x", "onReceiveResult");
+            // Display the address string
+            // or an error message sent from the intent service.
+            mAddressOutput = resultData.getString(FetchAddressIntentService.RESULT_DATA_KEY);
+
+
+            // Show a toast message if an address was found.
+            if (resultCode == FetchAddressIntentService.SUCCESS_RESULT) {
+                Log.d("x", "onReceiveResult success");
+                displayAddressOutput();
+            }
+
+        }
     }
 }

@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.jtriemstra.quickweather.MainActivity"
+    tools:context=".activities.MainActivity"
     tools:showIn="@layout/activity_main"
     android:orientation="vertical">
 
@@ -23,4 +23,10 @@
         android:layout_height="wrap_content"
         android:text=""
         android:id="@+id/txtOutput"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/txtCityOutput"/>
 </LinearLayout >
