@@ -20,6 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.jtriemstra.quickweather.BuildConfig;
 import com.example.jtriemstra.quickweather.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -91,7 +92,7 @@ public class MainActivity extends Activity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        String url ="http://api.wunderground.com/api//conditions/q/MI/Kalamazoo.json";
+        String url ="http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/conditions/q/MI/Kalamazoo.json";
         Log.d("x","about to define request");
 // Request a string response from the provided URL.
         JsonObjectRequest objRequest = new JsonObjectRequest(Request.Method.GET, url, null,
