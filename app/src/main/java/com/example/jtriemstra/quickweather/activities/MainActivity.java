@@ -22,6 +22,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.jtriemstra.quickweather.BuildConfig;
 import com.example.jtriemstra.quickweather.R;
+import com.example.jtriemstra.quickweather.data.WeatherSuccessCallback;
+import com.example.jtriemstra.quickweather.data.Wunderground;
+import com.example.jtriemstra.quickweather.data.WundergroundFactory;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -88,32 +91,13 @@ public class MainActivity extends Activity {
 
         startLocationUpdates();
 
-        Log.d("x","about to make request");
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        String url ="http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/conditions/q/MI/Kalamazoo.json";
-        Log.d("x","about to define request");
-// Request a string response from the provided URL.
-        JsonObjectRequest objRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Display the first 500 characters of the response string.
-                        //mTextView.setText("Response is: "+ response.substring(0,500));
-                        Log.d("y", response.toString().substring(0,50));
-                    }
-                }, new Response.ErrorListener() {
+        WundergroundFactory objFactory = new WundergroundFactory(this);
+        objFactory.loadDataByZip("49001", new WeatherSuccessCallback() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-                Log.e("y", error.getMessage());
+            public void onSuccess(Wunderground objResult) {
+                
             }
         });
-        Log.d("x", "about to add request");
-// Add the request to the RequestQueue.
-        queue.add(objRequest);
-
     }
 
     @Override

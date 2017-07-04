@@ -1,5 +1,6 @@
 package com.example.jtriemstra.quickweather.data;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -8,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.jtriemstra.quickweather.BuildConfig;
 
 import org.json.JSONObject;
 
@@ -16,58 +18,26 @@ import org.json.JSONObject;
  */
 public class Wunderground {
 
-    /*private JSONObject m_objData;
+    private JSONObject m_objData;
+
+    public Wunderground(JSONObject objData)
+    {
+        m_objData = objData;
+    }
 
     public String getTemperature()
     {
-
+        return "";
     }
 
     public String getDewpoint()
     {
-
+        return "";
     }
 
     public String getRadarImageUrl()
     {
-
+        return "";
     }
 
-    public static Wunderground getDataByZip(String strZip)
-    {
-        Wunderground objReturn = new Wunderground();
-        objReturn.m_objData = doDataRequest(strZip);
-
-        return objReturn;
-    }
-
-    private static JSONObject doDataRequest(String strZip)
-    {
-        Log.d("x", "about to make request");
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        String url ="http://api.wunderground.com/api/02ed4fc1de9b9832/conditions/q/MI/Kalamazoo.json";
-        Log.d("x","about to define request");
-// Request a string response from the provided URL.
-        JsonObjectRequest objRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Display the first 500 characters of the response string.
-                        //mTextView.setText("Response is: "+ response.substring(0,500));
-                        Log.d("y", response.toString().substring(0,50));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-                Log.e("y", error.getMessage());
-            }
-        });
-        Log.d("x", "about to add request");
-// Add the request to the RequestQueue.
-        queue.add(objRequest);
-    }
-    */
 }
