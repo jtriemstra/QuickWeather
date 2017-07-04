@@ -40,7 +40,7 @@ public class FetchAddressIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("x", "onhandleintent");
+        Log.d(TAG, "onHandleIntent");
         String errorMessage = "";
 
         // Get the location passed to this service through an extra.
@@ -95,7 +95,7 @@ public class FetchAddressIntentService extends IntentService {
     }
 
     private void deliverResultToReceiver(int resultCode, String message) {
-        Log.d("x", "delivering result");
+        Log.d(TAG, "deliverResultToReceiver");
 
         Bundle bundle = new Bundle();
         bundle.putString(RESULT_DATA_KEY, message);

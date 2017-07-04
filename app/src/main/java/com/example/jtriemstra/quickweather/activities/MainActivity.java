@@ -12,16 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.jtriemstra.quickweather.BuildConfig;
 import com.example.jtriemstra.quickweather.R;
 import com.example.jtriemstra.quickweather.data.VolleySingleton;
 import com.example.jtriemstra.quickweather.data.WeatherSuccessCallback;
@@ -36,41 +27,38 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.example.jtriemstra.quickweather.services.FetchAddressIntentService;
 
-import org.json.JSONObject;
 
 public class MainActivity extends Activity {
 
-    private FusedLocationProviderClient mFusedLocationClient;
-    private Location mLocation;
-    private LocationRequest mLocationRequest;
-    private LocationCallback mLocationCallback;
-    private AddressResultReceiver mResultReceiver;
-    private String mAddressOutput;
+    private FusedLocationProviderClient m_objFusedLocationClient;
+    private Location m_objLocation;
+    private LocationRequest m_objLocationRequest;
+    private LocationCallback m_objLocationCallback;
+    private AddressResultReceiver m_objResultReceiver;
+    private String m_objAddressOutput;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d("Location", "test");
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        m_objFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         //TODO: what can I do with this Handler() parameter?
-        mResultReceiver = new AddressResultReceiver(new Handler());
+        m_objResultReceiver = new AddressResultReceiver(new Handler());
 
         //TODO: under what conditions is this necessary?
-        mFusedLocationClient.getLastLocation()
+        m_objFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
-                        Log.d("Location", "success");
+                        Log.d(TAG, "fusedLocationClient success");
+
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
-                            mLocation = location;
-                            Log.d("Location", Double.toString(location.getLatitude()));
-                            TextView objTextView = (TextView) findViewById(R.id.txtOutput);
-                            objTextView.setText(Double.toString(location.getLatitude()));
+                            m_objLocation = location;
+                            Log.d(TAG, Double.toString(location.getLatitude()));
 
                             startIntentService();
                         }
@@ -79,14 +67,13 @@ public class MainActivity extends Activity {
 
         createLocationRequest();
 
-        mLocationCallback = new LocationCallback() {
+        m_objLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 for (Location location : locationResult.getLocations()) {
-                    Log.d("LocationUpdate", Double.toString(location.getLatitude()));
-                    TextView objTextView = (TextView) findViewById(R.id.txtOutput);
-                    objTextView.setText(Double.toString(location.getLatitude()));
-                    mLocation = location;
+                    Log.d(TAG, Double.toString(location.getLatitude()));
+
+                    m_objLocation = location;
                 }
             };
         };
@@ -103,11 +90,11 @@ public class MainActivity extends Activity {
                     ((TextView) findViewById(R.id.txtDewPointOutput)).setText(objResult.getDewpoint());
                     ((NetworkImageView) findViewById(R.id.vwRadarImage)).setImageUrl(objResult.getRadarImageUrl(), VolleySingleton.getInstance(getApplicationContext()).getImageLoader());
 
-                    Log.d("x", objResult.getRadarImageUrl());
+                    Log.d(TAG, objResult.getRadarImageUrl());
                 }
                 catch (Exception e)
                 {
-                    Log.e("x", e.getMessage());
+                    Log.e(TAG, e.getMessage());
                 }
             }
         });
@@ -121,8 +108,8 @@ public class MainActivity extends Activity {
     }
 
     private void startLocationUpdates() {
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                mLocationCallback,
+        m_objFusedLocationClient.requestLocationUpdates(m_objLocationRequest,
+                m_objLocationCallback,
                 null /* Looper */);
     }
 
@@ -133,7 +120,7 @@ public class MainActivity extends Activity {
     }
 
     private void stopLocationUpdates() {
-        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        m_objFusedLocationClient.removeLocationUpdates(m_objLocationCallback);
     }
 
     @Override
@@ -159,47 +146,43 @@ public class MainActivity extends Activity {
     }
 
     protected void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        m_objLocationRequest = new LocationRequest();
+        m_objLocationRequest.setInterval(10000);
+        m_objLocationRequest.setFastestInterval(5000);
+        m_objLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     protected void startIntentService() {
-        Log.d("x", "starting intent service");
+        Log.d(TAG, "starting intent service");
         Intent intent = new Intent(this, FetchAddressIntentService.class);
-        intent.putExtra(FetchAddressIntentService.RECEIVER, mResultReceiver);
-        intent.putExtra(FetchAddressIntentService.LOCATION_DATA_EXTRA, mLocation);
+        intent.putExtra(FetchAddressIntentService.RECEIVER, m_objResultReceiver);
+        intent.putExtra(FetchAddressIntentService.LOCATION_DATA_EXTRA, m_objLocation);
         startService(intent);
     }
 
     private void displayAddressOutput()
     {
-        Log.d("address", mAddressOutput);
-        ((TextView) findViewById(R.id.txtCityOutput)).setText(mAddressOutput);
+        Log.d(TAG, m_objAddressOutput);
+        ((TextView) findViewById(R.id.txtCityOutput)).setText(m_objAddressOutput);
     }
 
     @SuppressLint("ParcelCreator")
     class AddressResultReceiver extends ResultReceiver {
         public AddressResultReceiver(Handler handler) {
             super(handler);
-            Log.d("x","creating AddressResultReceiver");
+            Log.d(TAG,"creating AddressResultReceiver");
         }
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-            Log.d("x", "onReceiveResult");
-            // Display the address string
-            // or an error message sent from the intent service.
-            mAddressOutput = resultData.getString(FetchAddressIntentService.RESULT_DATA_KEY);
+            Log.d(TAG, "onReceiveResult");
 
+            m_objAddressOutput = resultData.getString(FetchAddressIntentService.RESULT_DATA_KEY);
 
-            // Show a toast message if an address was found.
             if (resultCode == FetchAddressIntentService.SUCCESS_RESULT) {
-                Log.d("x", "onReceiveResult success");
+                Log.d(TAG, "onReceiveResult success");
                 displayAddressOutput();
             }
-
         }
     }
 }

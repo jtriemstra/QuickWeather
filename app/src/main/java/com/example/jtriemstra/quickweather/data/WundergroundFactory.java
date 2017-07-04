@@ -18,6 +18,7 @@ import org.json.JSONObject;
  */
 public class WundergroundFactory {
     private Context m_objContext;
+    private static final String TAG = "WundergroundFactory";
 
     public WundergroundFactory(Context objAppContext)
     {
@@ -28,23 +29,25 @@ public class WundergroundFactory {
     {
         RequestQueue queue = VolleySingleton.getInstance(m_objContext).getQueue();
 
-        String url ="http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/conditions/radar/q/MI/Kalamazoo.json";
+        String url ="http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/conditions/radar/q/" + strZip + ".json";
 
+        //TODO: move the anonymous classes out to named ones?
         JsonObjectRequest objRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("y", response.toString().substring(0, 50));
-                        objCallback.onSuccess(new Wunderground(response));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d(TAG, response.toString().substring(0, 50));
+                    objCallback.onSuccess(new Wunderground(response));
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-                Log.e("y", error.getMessage());
-            }
-        });
+                    Log.e(TAG, error.getMessage());
+                }
+            });
 
         queue.add(objRequest);
     }
+
 }
