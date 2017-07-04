@@ -91,11 +91,20 @@ public class MainActivity extends Activity {
 
         startLocationUpdates();
 
-        WundergroundFactory objFactory = new WundergroundFactory(this);
+        WundergroundFactory objFactory = new WundergroundFactory(getApplicationContext());
         objFactory.loadDataByZip("49001", new WeatherSuccessCallback() {
             @Override
             public void onSuccess(Wunderground objResult) {
-                
+                try
+                {
+                    ((TextView) findViewById(R.id.txtTemperatureOutput)).setText(objResult.getTemperature());
+                    ((TextView) findViewById(R.id.txtDewPointOutput)).setText(objResult.getDewpoint());
+
+                }
+                catch (Exception e)
+                {
+
+                }
             }
         });
     }

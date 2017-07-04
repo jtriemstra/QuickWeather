@@ -25,19 +25,22 @@ public class Wunderground {
         m_objData = objData;
     }
 
-    public String getTemperature()
+    public String getTemperature() throws Exception
     {
-        return "";
+        JSONObject objCurrent = m_objData.getJSONObject("current_observation");
+        return objCurrent.getString("temperature_string");
     }
 
-    public String getDewpoint()
+    public String getDewpoint() throws Exception
     {
-        return "";
+        JSONObject objCurrent = m_objData.getJSONObject("current_observation");
+        return objCurrent.getString("dewpoint_string");
     }
 
-    public String getRadarImageUrl()
+    public String getRadarImageUrl() throws Exception
     {
-        return "";
+        JSONObject objRadar = m_objData.getJSONObject("radar");
+        return objRadar.getString("image_url");
     }
 
 }

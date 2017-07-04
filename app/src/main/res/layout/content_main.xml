@@ -29,4 +29,16 @@
         android:layout_height="wrap_content"
         android:text=""
         android:id="@+id/txtCityOutput"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/txtTemperatureOutput"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/txtDewPointOutput"/>
 </LinearLayout >

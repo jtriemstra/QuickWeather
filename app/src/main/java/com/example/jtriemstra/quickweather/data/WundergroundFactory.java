@@ -19,14 +19,14 @@ import org.json.JSONObject;
 public class WundergroundFactory {
     private Context m_objContext;
 
-    public WundergroundFactory(Context objContext)
+    public WundergroundFactory(Context objAppContext)
     {
-        m_objContext = objContext;
+        m_objContext = objAppContext;
     }
 
     public void loadDataByZip(String strZip, final WeatherSuccessCallback objCallback)
     {
-        RequestQueue queue = Volley.newRequestQueue(m_objContext);
+        RequestQueue queue = VolleySingleton.getInstance(m_objContext).getQueue();
 
         String url ="http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/conditions/q/MI/Kalamazoo.json";
 
