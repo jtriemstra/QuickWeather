@@ -18,10 +18,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.jtriemstra.quickweather.BuildConfig;
 import com.example.jtriemstra.quickweather.R;
+import com.example.jtriemstra.quickweather.data.VolleySingleton;
 import com.example.jtriemstra.quickweather.data.WeatherSuccessCallback;
 import com.example.jtriemstra.quickweather.data.Wunderground;
 import com.example.jtriemstra.quickweather.data.WundergroundFactory;
@@ -99,11 +101,13 @@ public class MainActivity extends Activity {
                 {
                     ((TextView) findViewById(R.id.txtTemperatureOutput)).setText(objResult.getTemperature());
                     ((TextView) findViewById(R.id.txtDewPointOutput)).setText(objResult.getDewpoint());
+                    ((NetworkImageView) findViewById(R.id.vwRadarImage)).setImageUrl(objResult.getRadarImageUrl(), VolleySingleton.getInstance(getApplicationContext()).getImageLoader());
 
+                    Log.d("x", objResult.getRadarImageUrl());
                 }
                 catch (Exception e)
                 {
-
+                    Log.e("x", e.getMessage());
                 }
             }
         });

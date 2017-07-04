@@ -28,7 +28,7 @@ public class WundergroundFactory {
     {
         RequestQueue queue = VolleySingleton.getInstance(m_objContext).getQueue();
 
-        String url ="http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/conditions/q/MI/Kalamazoo.json";
+        String url ="http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/conditions/radar/q/MI/Kalamazoo.json";
 
         JsonObjectRequest objRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {

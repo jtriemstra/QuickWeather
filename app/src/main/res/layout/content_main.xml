@@ -41,4 +41,11 @@
         android:layout_height="wrap_content"
         android:text=""
         android:id="@+id/txtDewPointOutput"/>
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/vwRadarImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        />
 </LinearLayout >
