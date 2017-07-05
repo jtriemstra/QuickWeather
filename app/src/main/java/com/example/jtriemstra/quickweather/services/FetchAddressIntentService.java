@@ -27,6 +27,7 @@ public class FetchAddressIntentService extends IntentService {
     public static final String PACKAGE_NAME = "com.google.android.gms.location.sample.locationaddress";
     public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
     public static final String RESULT_DATA_KEY = PACKAGE_NAME + ".RESULT_DATA_KEY";
+    public static final String ZIP_DATA_KEY = PACKAGE_NAME + ".ZIP_DATA_KEY";
     public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME + ".LOCATION_DATA_EXTRA";
 
     private static final String TAG = "FetchAddressIS";
@@ -35,7 +36,7 @@ public class FetchAddressIntentService extends IntentService {
 
     public FetchAddressIntentService() {
         super("FetchAddressIntentService");
-        Log.d("x", "service constructor");
+        Log.d(TAG, "service constructor");
     }
 
     @Override
@@ -77,7 +78,7 @@ public class FetchAddressIntentService extends IntentService {
                 errorMessage = getString(R.string.no_address_found);
                 Log.e(TAG, errorMessage);
             }
-            deliverResultToReceiver(FAILURE_RESULT, errorMessage);
+            deliverResultToReceiver(FAILURE_RESULT, errorMessage, null);
         } else {
             Address address = addresses.get(0);
             ArrayList<String> addressFragments = new ArrayList<String>();
@@ -90,15 +91,17 @@ public class FetchAddressIntentService extends IntentService {
             Log.i(TAG, getString(R.string.address_found));
             deliverResultToReceiver(SUCCESS_RESULT,
                     TextUtils.join(System.getProperty("line.separator"),
-                            addressFragments));
+                            addressFragments),
+                    address.getPostalCode());
         }
     }
 
-    private void deliverResultToReceiver(int resultCode, String message) {
+    private void deliverResultToReceiver(int resultCode, String message, String zip) {
         Log.d(TAG, "deliverResultToReceiver");
 
         Bundle bundle = new Bundle();
         bundle.putString(RESULT_DATA_KEY, message);
+        bundle.putString(ZIP_DATA_KEY, zip);
         mReceiver.send(resultCode, bundle);
     }
 }

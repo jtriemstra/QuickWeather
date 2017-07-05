@@ -129,10 +129,11 @@ public class LocationFacade {
             Log.d(TAG, "onReceiveResult");
 
             m_objAddressOutput = resultData.getString(FetchAddressIntentService.RESULT_DATA_KEY);
+            String strZip = resultData.getString(FetchAddressIntentService.ZIP_DATA_KEY);
 
             if (resultCode == FetchAddressIntentService.SUCCESS_RESULT) {
                 Log.d(TAG, "onReceiveResult success");
-                m_objSuccessCommand.onSuccess(m_objAddressOutput);
+                m_objSuccessCommand.onSuccess(m_objAddressOutput, strZip);
             }
         }
     }

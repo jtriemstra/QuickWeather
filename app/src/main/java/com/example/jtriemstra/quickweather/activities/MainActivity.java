@@ -30,28 +30,22 @@ public class MainActivity extends Activity {
 
         m_objLocationFacade.getLocation(new IAddressSuccessCommand() {
             @Override
-            public void onSuccess(String strAddress) {
+            public void onSuccess(String strAddress, String strZip) {
                 displayAddressOutput(strAddress);
+
+                WundergroundFactory objFactory = new WundergroundFactory(getApplicationContext());
+                objFactory.loadDataByZip(strZip, new IWeatherSuccessCommand() {
+                    @Override
+                    public void onSuccess(Wunderground objResult) {
+                        displayWeatherInfo(objResult);
+                    }
+                });
             }
         });
 
         //m_objLocationFacade.startPollingForUpdates();
 
-        WundergroundFactory objFactory = new WundergroundFactory(getApplicationContext());
-        objFactory.loadDataByZip("49001", new IWeatherSuccessCommand() {
-            @Override
-            public void onSuccess(Wunderground objResult) {
-                try {
-                    ((TextView) findViewById(R.id.txtTemperatureOutput)).setText(objResult.getTemperature());
-                    ((TextView) findViewById(R.id.txtDewPointOutput)).setText(objResult.getDewpoint());
-                    ((NetworkImageView) findViewById(R.id.vwRadarImage)).setImageUrl(objResult.getRadarImageUrl(), VolleySingleton.getInstance(getApplicationContext()).getImageLoader());
 
-                    Log.d(TAG, objResult.getRadarImageUrl());
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
     }
 
     @Override
@@ -93,5 +87,16 @@ public class MainActivity extends Activity {
         ((TextView) findViewById(R.id.txtCityOutput)).setText(strAddress);
     }
 
+    private void displayWeatherInfo(Wunderground objResult)
+    {
+        try {
+            ((TextView) findViewById(R.id.txtTemperatureOutput)).setText(objResult.getTemperature());
+            ((TextView) findViewById(R.id.txtDewPointOutput)).setText(objResult.getDewpoint());
+            ((NetworkImageView) findViewById(R.id.vwRadarImage)).setImageUrl(objResult.getRadarImageUrl(), VolleySingleton.getInstance(getApplicationContext()).getImageLoader());
 
+            Log.d(TAG, objResult.getRadarImageUrl());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
 }
