@@ -26,14 +26,16 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        m_objLocationFacade = new LocationFacade(this, new IAddressSuccessCommand() {
+        m_objLocationFacade = new LocationFacade(this);
+
+        m_objLocationFacade.getLocation(new IAddressSuccessCommand() {
             @Override
             public void onSuccess(String strAddress) {
                 displayAddressOutput(strAddress);
             }
         });
 
-        m_objLocationFacade.getLocation();
+        //m_objLocationFacade.startPollingForUpdates();
 
         WundergroundFactory objFactory = new WundergroundFactory(getApplicationContext());
         objFactory.loadDataByZip("49001", new IWeatherSuccessCommand() {

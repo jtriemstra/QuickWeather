@@ -32,14 +32,15 @@ public class LocationFacade {
     private Context m_objActivityContext;
     private IAddressSuccessCommand m_objSuccessCommand;
 
-    public LocationFacade(Context objActivityContext, IAddressSuccessCommand objSuccessCommand)
+    public LocationFacade(Context objActivityContext)
     {
         m_objActivityContext = objActivityContext;
-        m_objSuccessCommand = objSuccessCommand;
     }
 
-    public void getLocation()
+    public void getLocation(IAddressSuccessCommand objSuccessCommand)
     {
+        m_objSuccessCommand = objSuccessCommand;
+
         //TODO: how can I test against the validity of this context, eg when app rotates or goes out of focus?
         m_objFusedLocationClient = LocationServices.getFusedLocationProviderClient(m_objActivityContext);
 
@@ -67,6 +68,8 @@ public class LocationFacade {
 
     public void startPollingForUpdates()
     {
+        m_blnEnableUpdates = true;
+
         createLocationRequest();
 
         m_objLocationCallback = new LocationCallback() {
