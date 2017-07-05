@@ -15,7 +15,7 @@ import org.json.JSONObject;
 /**
  * Created by JTriemstra on 7/3/2017.
  */
-public class WundergroundFactory {
+public class WundergroundFactory implements IWeatherFactory {
     private Context m_objContext;
     private static final String TAG = "WundergroundFactory";
 

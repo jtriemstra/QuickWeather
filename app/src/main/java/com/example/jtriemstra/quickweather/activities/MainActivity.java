@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.jtriemstra.quickweather.R;
 import com.example.jtriemstra.quickweather.data.IAddressSuccessCommand;
+import com.example.jtriemstra.quickweather.data.IWeather;
+import com.example.jtriemstra.quickweather.data.IWeatherFactory;
 import com.example.jtriemstra.quickweather.data.LocationFacade;
 import com.example.jtriemstra.quickweather.data.VolleySingleton;
 import com.example.jtriemstra.quickweather.data.IWeatherSuccessCommand;
@@ -33,10 +35,12 @@ public class MainActivity extends Activity {
             public void onSuccess(String strAddress, String strZip) {
                 displayAddressOutput(strAddress);
 
-                WundergroundFactory objFactory = new WundergroundFactory(getApplicationContext());
+                //TODO: default if the address lookup fails? show toast so user knows?
+                IWeatherFactory objFactory = new WundergroundFactory(getApplicationContext());
+
                 objFactory.loadDataByZip(strZip, new IWeatherSuccessCommand() {
                     @Override
-                    public void onSuccess(Wunderground objResult) {
+                    public void onSuccess(IWeather objResult) {
                         displayWeatherInfo(objResult);
                     }
                 });
@@ -87,7 +91,7 @@ public class MainActivity extends Activity {
         ((TextView) findViewById(R.id.txtCityOutput)).setText(strAddress);
     }
 
-    private void displayWeatherInfo(Wunderground objResult)
+    private void displayWeatherInfo(IWeather objResult)
     {
         try {
             ((TextView) findViewById(R.id.txtTemperatureOutput)).setText(objResult.getTemperature());

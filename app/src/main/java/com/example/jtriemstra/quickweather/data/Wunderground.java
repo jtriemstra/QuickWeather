@@ -16,7 +16,8 @@ import org.json.JSONObject;
 /**
  * Created by JTriemstra on 7/3/2017.
  */
-public class Wunderground {
+public class Wunderground implements IWeather
+{
 
     private JSONObject m_objData;
 
