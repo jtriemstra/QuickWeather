@@ -37,4 +37,16 @@
         android:layout_height="wrap_content"
 
         />
+
+    <!-- https://stackoverflow.com/questions/5425341/android-linear-layout-how-to-keep-element-at-bottom-of-view/26140793#26140793 note API level comment -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/wunderground_logo"
+        android:layout_gravity="right"/>
 </LinearLayout >
