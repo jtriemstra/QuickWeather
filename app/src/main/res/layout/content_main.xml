@@ -50,10 +50,23 @@
             <!-- this expands to fill the empty space if needed -->
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/wunderground_logo"
-            android:layout_gravity="right"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data provided by: "
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/wunderground_logo"/>
+
+        </LinearLayout>
+
     </LinearLayout >
 </ScrollView>
