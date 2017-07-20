@@ -1,4 +1,4 @@
-package com.example.jtriemstra.quickweather.data;
+package com.example.jtriemstra.quickweather.data.weather;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,6 +9,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.jtriemstra.quickweather.BuildConfig;
+import com.example.jtriemstra.quickweather.data.VolleySingleton;
+import com.example.jtriemstra.quickweather.data.weather.IWeatherFactory;
+import com.example.jtriemstra.quickweather.data.weather.IWeatherSuccessCommand;
+import com.example.jtriemstra.quickweather.data.weather.Wunderground;
 
 import org.json.JSONObject;
 

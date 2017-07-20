@@ -1,4 +1,4 @@
-package com.example.jtriemstra.quickweather.data;
+package com.example.jtriemstra.quickweather.data.weather;
 
 /**
  * Created by JTriemstra on 7/4/2017.

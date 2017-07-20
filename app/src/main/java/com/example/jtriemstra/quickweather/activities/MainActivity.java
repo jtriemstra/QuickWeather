@@ -9,14 +9,13 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.jtriemstra.quickweather.R;
-import com.example.jtriemstra.quickweather.data.IAddressSuccessCommand;
-import com.example.jtriemstra.quickweather.data.IWeather;
-import com.example.jtriemstra.quickweather.data.IWeatherFactory;
-import com.example.jtriemstra.quickweather.data.LocationFacade;
+import com.example.jtriemstra.quickweather.data.location.IAddressSuccessCommand;
+import com.example.jtriemstra.quickweather.data.weather.IWeather;
+import com.example.jtriemstra.quickweather.data.weather.IWeatherFactory;
+import com.example.jtriemstra.quickweather.data.location.LocationFacade;
 import com.example.jtriemstra.quickweather.data.VolleySingleton;
-import com.example.jtriemstra.quickweather.data.IWeatherSuccessCommand;
-import com.example.jtriemstra.quickweather.data.Wunderground;
-import com.example.jtriemstra.quickweather.data.WundergroundFactory;
+import com.example.jtriemstra.quickweather.data.weather.IWeatherSuccessCommand;
+import com.example.jtriemstra.quickweather.data.weather.WundergroundFactory;
 
 public class MainActivity extends Activity {
 
@@ -27,6 +26,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d(TAG, "Image width before load: " + ((NetworkImageView) findViewById(R.id.vwRadarImage)).getWidth());
+
 
         m_objLocationFacade = new LocationFacade(this);
 
@@ -86,6 +88,8 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     private void displayAddressOutput(String strAddress)
     {
         ((TextView) findViewById(R.id.txtCityOutput)).setText(strAddress);
@@ -99,6 +103,7 @@ public class MainActivity extends Activity {
             ((NetworkImageView) findViewById(R.id.vwRadarImage)).setImageUrl(objResult.getRadarImageUrl(), VolleySingleton.getInstance(getApplicationContext()).getImageLoader());
 
             Log.d(TAG, objResult.getRadarImageUrl());
+            Log.d(TAG, "Image width after load: " + ((NetworkImageView) findViewById(R.id.vwRadarImage)).getWidth());
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
