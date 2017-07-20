@@ -1,5 +1,6 @@
 package com.example.jtriemstra.quickweather.data.weather;
 
+import com.example.jtriemstra.quickweather.BuildConfig;
 import com.example.jtriemstra.quickweather.data.weather.IWeather;
 
 import org.json.JSONObject;
@@ -11,10 +12,12 @@ public class Wunderground implements IWeather
 {
 
     private JSONObject m_objData;
+    private String m_strZip;
 
-    public Wunderground(JSONObject objData)
+    public Wunderground(JSONObject objData, String strZip)
     {
         m_objData = objData;
+        m_strZip = strZip;
     }
 
     public String getTemperature() throws Exception
@@ -31,8 +34,10 @@ public class Wunderground implements IWeather
 
     public String getRadarImageUrl() throws Exception
     {
-        JSONObject objRadar = m_objData.getJSONObject("radar");
-        return objRadar.getString("image_url");
+        /*JSONObject objRadar = m_objData.getJSONObject("radar");
+        return objRadar.getString("image_url");*/
+
+        return "http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/radar/q/" + m_strZip + ".gif?width=656&height=656&newmaps=1&noclutter=1";
     }
 
 }

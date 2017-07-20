@@ -28,11 +28,11 @@ public class WundergroundFactory implements IWeatherFactory {
         m_objContext = objAppContext;
     }
 
-    public void loadDataByZip(String strZip, final IWeatherSuccessCommand objCallback)
+    public void loadDataByZip(final String strZip, final IWeatherSuccessCommand objCallback)
     {
         RequestQueue queue = VolleySingleton.getInstance(m_objContext).getQueue();
 
-        String url ="http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/conditions/radar/q/" + strZip + ".json";
+        String url ="http://api.wunderground.com/api/" + BuildConfig.WUNDERGROUND_API_KEY + "/conditions/q/" + strZip + ".json";
 
         //TODO: move the anonymous classes out to named ones?
         JsonObjectRequest objRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -40,7 +40,7 @@ public class WundergroundFactory implements IWeatherFactory {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.d(TAG, response.toString().substring(0, 50));
-                    objCallback.onSuccess(new Wunderground(response));
+                    objCallback.onSuccess(new Wunderground(response, strZip));
                 }
             }, new Response.ErrorListener() {
                 @Override
